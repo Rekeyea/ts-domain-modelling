@@ -1,0 +1,23 @@
+<section [formGroup]="form">
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input matInput placeholder="Title" formControlName="title">
+        </mat-form-field>
+    </p>
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput placeholder="Description" formControlName="description"></textarea>
+        </mat-form-field>
+    </p>
+    <p>
+        <mat-form-field appearance="outline">
+            <mat-label>Importance</mat-label>
+            <mat-select formControlName="importance" [compareWith]="compareSelects">
+                <mat-option *ngFor="let item of importances | keyvalue" value="{{item.key}}">{{item.value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </p>
+    <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="UpdateTodoFromForm()">Update</button>
+</section>

@@ -1,0 +1,9 @@
+<div class="toggle-zone">
+    <mat-slide-toggle [(ngModel)]="isChecked">{{isChecked ? "To Full View" : "To Preview"}}</mat-slide-toggle>
+</div>
+<div class="list">
+    <ng-container *ngFor="let todo of todos">
+        <app-todo-preview *ngIf="isChecked" [todo]="todo"></app-todo-preview>
+        <app-todo-full *ngIf="!isChecked" [todo]="todo"></app-todo-full>
+    </ng-container>
+</div>

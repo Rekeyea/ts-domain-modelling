@@ -1,0 +1,5 @@
+<mat-selection-list #todo_route [multiple]="false">
+    <mat-list-option *ngFor="let map of routes" [value]="map.url" (selectedChange)="navigate(todo_route.selectedOptions.selected[0].value)">
+        {{map.text}}
+    </mat-list-option>
+</mat-selection-list>
