@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiResponse, CreatedToDo, HistoricalToDo, ImportanceMap, isDeletedTodo, ToDo, ToDoToCreate, ToDoToDelete, ToDoToUpdate } from './models';
+import { ApiResponse, CreatedToDo, ImportanceMap, isCreatedTodo, isDeletedTodo, isUpdatedTodo, OneOfTodo, ToDo, ToDoToCreate, ToDoToDelete, ToDoToUpdate } from './models';
 
 @Injectable({
   providedIn: 'root'
@@ -8,15 +8,17 @@ export class TodosService {
 
   constructor() { }
 
-  CreateToDo(todo: ToDoToCreate): Promise<ApiResponse<HistoricalToDo>>{
+  CreateToDo(todo: ToDoToCreate): Promise<ApiResponse<OneOfTodo>>{
     return new Promise(
       resolve => setTimeout(() => resolve({data: {
         ...todo, 
         id: this.ToDos.length + 1, 
         description: todo.description ?? "", 
-        createdAt: new Date().toISOString(),
-        createdById: 2,
-        createdByName: "Emiliano"
+        audit : {
+          createdAt: new Date().toISOString(),
+          createdById: 2,
+          createdByName: "Emiliano"
+        }
       }}), 500)
     )
   }
@@ -36,7 +38,7 @@ export class TodosService {
   } as ImportanceMap;
 
   GetToDos(){
-    return this.ToDos.filter(x => !x.deletedById).map(x => x as ToDo);
+    return this.ToDos.filter(x => isCreatedTodo(x) || isUpdatedTodo(x)).map(x => x as ToDo);
   }
 
   DeleteToDo(todo: ToDoToDelete){
@@ -45,7 +47,23 @@ export class TodosService {
     )
   }
 
-  private ToDos: HistoricalToDo[] = [
+  All(){
+    return this.ToDos;
+  }
+
+  Created(){
+    return this.ToDos.filter(isCreatedTodo);
+  }
+
+  Updated(){
+    return this.ToDos.filter(isUpdatedTodo);
+  }
+
+  Deleted(){
+    return this.ToDos.filter(isDeletedTodo);
+  }
+
+  private ToDos = [
     {
       "id": 1,
       "title": "delectus aut autem",
@@ -427,5 +445,13 @@ export class TodosService {
       "deletedAt": new Date(2022, 11, 2).toISOString(),
       "deletedById": 1,
       "deletedByName": "Emiliano"
-    }];
+    }].map(x => {
+      const {createdAt, createdById, createdByName, updatedAt, updatedById, updatedByName, deletedAt, deletedById, deletedByName, ...r} = x;
+      const audit = {
+        createdAt, createdById, createdByName, 
+        updatedAt, updatedById, updatedByName, 
+        deletedAt, deletedById, deletedByName
+      };
+      return {...r, audit};
+    }) as OneOfTodo[];
 }

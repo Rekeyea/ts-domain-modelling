@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TodoPreviewComponent } from './todo-preview/todo-preview.component';
 import { TodoListComponent } from './todo-list/todo-list.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatSidenavModule} from "@angular/material/sidenav";
@@ -22,6 +19,14 @@ import {MatCardModule} from "@angular/material/card";
 import { ImportancePipe } from './importance.pipe';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import { EditTodoComponent } from './edit-todo/edit-todo.component';
+import { HistoricalTodoComponent } from './historical-todo/historical-todo.component';
+import { DeletedTodoComponent } from './deleted-todo/deleted-todo.component';
+import { UpdatedTodoComponent } from './updated-todo/updated-todo.component';
+import { CreatedTodoComponent } from './created-todo/created-todo.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatTabsModule} from "@angular/material/tabs";
+import {MatChipsModule} from "@angular/material/chips";
 
 @NgModule({
   declarations: [
@@ -33,12 +38,16 @@ import { EditTodoComponent } from './edit-todo/edit-todo.component';
     NewTodosComponent,
     TodoFullComponent,
     ImportancePipe,
-    EditTodoComponent
+    EditTodoComponent,
+    HistoricalTodoComponent,
+    DeletedTodoComponent,
+    UpdatedTodoComponent,
+    CreatedTodoComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
+    AppRoutingModule,
     MatToolbarModule,
     MatIconModule,
     MatSidenavModule,
@@ -49,7 +58,9 @@ import { EditTodoComponent } from './edit-todo/edit-todo.component';
     MatButtonModule,
     MatCardModule,
     MatSlideToggleModule,
-    FormsModule
+    FormsModule,
+    MatTabsModule,
+    MatChipsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

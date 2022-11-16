@@ -1,1 +1,14 @@
-<p>historical-todos works!</p>
+<mat-tab-group>
+    <mat-tab label="All">
+        <app-historical-todo *ngFor="let todo of todos" [todo]="todo"></app-historical-todo>
+    </mat-tab>
+    <mat-tab label="Created"> 
+        <app-created-todo *ngFor="let todo of created" [todo]="todo"></app-created-todo>    
+    </mat-tab>
+    <mat-tab label="Updated">
+        <app-updated-todo *ngFor="let todo of updated" [todo]="todo"></app-updated-todo>
+    </mat-tab>
+    <mat-tab label="Deleted">
+        <app-deleted-todo *ngFor="let todo of deleted" [todo]="todo"></app-deleted-todo>
+    </mat-tab>
+</mat-tab-group>

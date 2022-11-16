@@ -1,0 +1,5 @@
+<ng-container [ngSwitch]="type">
+    <app-created-todo [todo]="created" *ngSwitchCase="'Create'"></app-created-todo>
+    <app-updated-todo [todo]="updated" *ngSwitchCase="'Update'"></app-updated-todo>
+    <app-deleted-todo [todo]="deleted" *ngSwitchCase="'Delete'"></app-deleted-todo>
+</ng-container>

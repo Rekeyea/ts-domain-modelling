@@ -1,0 +1,14 @@
+<mat-card class="card">
+    <mat-card-title-group>
+        <mat-card-title>{{todo.title}}</mat-card-title>
+        <mat-card-subtitle>{{todo.importance | importance}}</mat-card-subtitle>
+    </mat-card-title-group>
+    <mat-card-content>
+        <p>{{todo.description}}</p>
+        <mat-chip-list>
+            <mat-chip>Created</mat-chip>
+            <mat-chip color="accent" selected>{{todo.audit.createdAt | date}}</mat-chip>
+            <mat-chip color="primary" selected>{{todo.audit.createdByName}}</mat-chip>
+        </mat-chip-list>
+    </mat-card-content>
+</mat-card>

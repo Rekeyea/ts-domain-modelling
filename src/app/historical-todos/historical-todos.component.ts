@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TodosService } from '../todos.service';
 
 @Component({
   selector: 'app-historical-todos',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HistoricalTodosComponent implements OnInit {
 
-  constructor() { }
+  constructor(private todoService: TodosService) { }
 
   ngOnInit(): void {
   }
+
+  public todos = this.todoService.All();
+  public created = this.todoService.Created();
+  public updated = this.todoService.Updated();
+  public deleted = this.todoService.Deleted();
 
 }

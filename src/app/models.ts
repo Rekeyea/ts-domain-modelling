@@ -29,21 +29,22 @@ export interface ToDo extends Entity {
     description: string,
     importance: ImportanceEnum
 }
-export type TOrTCollection<T> = T | T[];
+
 export interface ApiResponse<T extends Entity> {
-    data: TOrTCollection<T>,
+    data: T | T[],
     length?: number,
     next?: string
 }
+
 /* #endregion */
 
 /* #region ADT */
+
 export type ImportanceMap = {
     [key in ImportanceEnum]: string;
 };
 
 export type FormModel<T> = FormGroup<{
-    // [key in keyof T]: T[key] extends number ? FormControl<T[key] | null> : FormControl<T[key] | null | undefined>
     [key in keyof T]: FormControl<T[key] | null>
 }>
 
@@ -63,29 +64,43 @@ export interface AuditDelete {
     deletedByName: string
 }
 
-export type CreatedToDo = ToDo & AuditCreate & { type: "create" }
-export type UpdatedToDo = ToDo & AuditUpdate & { type: "update" }
-export type DeletedToDo = ToDo & AuditDelete & { type: "delete" }
-
-export type HistoricalToDo_V1 = ToDo & AuditCreate & AuditUpdate & AuditDelete;
+export type CreatedToDo = ToDo & {audit: AuditCreate};
+export type UpdatedToDo = ToDo & {audit: AuditUpdate};
+export type DeletedToDo = ToDo & {audit: AuditDelete};
 
 export type OneOfTodo =
     | CreatedToDo
     | UpdatedToDo
     | DeletedToDo
+
+// export type ApiResponse<T extends Entity> = ApiSingleResponse<T> | ApiArrayResponse<T>
+
+// interface ApiSingleResponse<T extends Entity>{
+//     data: T
+// }
+
+// interface ApiArrayResponse<T extends Entity>{
+//     data: T[],
+//     length: number,
+//     next: string
+// }
+
 /* #endregion */
 
 /* #region Type Predicates */
 export function isCreatedTodo(todo: OneOfTodo): todo is CreatedToDo {
-    return (todo as CreatedToDo).type === "create";
+    return ((todo as CreatedToDo).audit.createdAt != undefined 
+        && (todo as UpdatedToDo).audit.updatedAt === undefined
+        && (todo as DeletedToDo).audit.deletedAt === undefined);
 }
 
 export function isUpdatedTodo(todo: OneOfTodo): todo is UpdatedToDo {
-    return (todo as UpdatedToDo).type === "update";
+    return ((todo as UpdatedToDo).audit.updatedAt != undefined
+        && (todo as DeletedToDo).audit.deletedAt === undefined);
 }
 
 export function isDeletedTodo(todo: OneOfTodo): todo is DeletedToDo {
-    return (todo as DeletedToDo).type === "delete";
+    return (todo as DeletedToDo).audit.deletedAt != undefined;
 }
 
 
@@ -117,10 +132,8 @@ export type ToDoPreview = Pick<ToDo, "id" | "title" | "importance">
 
 export type ToDoToCreate = Required<Pick<ToDo, "title" | "importance">> & Partial<Pick<ToDo, "description">>;
 
-export type ToDoToUpdate = Partial<ToDoToCreate> & Readonly<Entity>
+export type ToDoToUpdate = Readonly<Entity> & Partial<ToDoToCreate>
 
 export type ToDoToDelete = Pick<ToDo, "id">
-
-export type HistoricalToDo = Omit<CreatedToDo, "type"> & Partial<Omit<UpdatedToDo, "type">> & Partial<Omit<DeletedToDo, "type">>;
 
 /* #endregion */
